@@ -1,8 +1,8 @@
 'use client'
 
-import { api } from '@/lib/api'
+import { getKPIs } from '@/lib/api'
 import dayjs from 'dayjs'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { ArrowUpDown, Loader2, ChevronDown, ChevronUp } from 'lucide-react'
 import {
   Table,
@@ -47,30 +47,38 @@ export function MaintenancePerformanceGrid() {
   const fetchData = async () => {
     setLoading(true)
     try {
-      const params = new URLSearchParams({
+      console.log('🔍 Buscando KPIs com parâmetros:', {
         startDate: filters.startDate,
         endDate: filters.endDate,
-        ...(filters.typeMaintenance && { typeMaintenance: filters.typeMaintenance }),
+        typeMaintenance: filters.typeMaintenance || '',
       })
-
-      const response = await fetch(
-        `http://localhost:3001/api/maintenance/reports/performance-indicator?${params.toString()}`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      )
       
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
+      const result = await getKPIs({
+        startDate: filters.startDate,
+        endDate: filters.endDate,
+        typeMaintenance: filters.typeMaintenance || '',
+      })
+      
+      // console.log('📊 Resultado da requisição:', result)
+      
+      if (result.success && result.data) {
+        // A API retorna {success: true, data: {success: true, data: [...]}}
+        // Precisamos acessar o data interno
+        const apiData = (result.data as any)?.data || result.data
+        // console.log('📦 Dados da API:', apiData)
+        
+        // Garante que data seja sempre um array
+        const dataArray = Array.isArray(apiData) 
+          ? apiData 
+          : []
+        console.log('✅ Dados recebidos:', dataArray.length, 'registros')
+        setData(dataArray as PerformanceManutencao[])
+      } else {
+        console.error('❌ Erro no resultado:', result.error)
+        throw new Error(result.error || 'Erro ao buscar dados')
       }
-      
-      const result = await response.json()
-      setData(result.data || [])
     } catch (error) {
-      console.error('Erro ao buscar dados:', error)
+      console.error('❌ Erro ao buscar dados:', error)
       // Usar dados mock para demonstração
       const { mockPerformanceData } = await import('@/lib/mock-data')
       setData(mockPerformanceData)
@@ -78,10 +86,6 @@ export function MaintenancePerformanceGrid() {
       setLoading(false)
     }
   }
-
-  useEffect(() => {
-    fetchData()
-  }, [])
 
   const handleSort = (key: keyof PerformanceManutencao) => {
     let direction: 'asc' | 'desc' = 'asc'
@@ -96,7 +100,7 @@ export function MaintenancePerformanceGrid() {
   }
 
   // Filtro global: busca em todas as colunas
-  const filteredData = data.filter((item) => {
+  const filteredData = Array.isArray(data) ? data.filter((item) => {
     if (!globalFilter) return true
     
     const searchTerm = globalFilter.toLowerCase()
@@ -110,7 +114,7 @@ export function MaintenancePerformanceGrid() {
       item.tempo_prev.toString().includes(searchTerm) ||
       item.tempo_corretiva.toString().includes(searchTerm)
     )
-  })
+  }) : []
 
   const sortedData = [...filteredData].sort((a, b) => {
     if (!sortConfig.key) return 0
