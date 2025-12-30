@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const BASE_URL = 'http://localhost:3001/api'
-const TOKEN_KEY = 'smartnew_9643'
+const TOKEN_KEY = 'teste12345_token'
 
 // Função para gerar um novo token JWT
 async function generateToken(): Promise<string> {
