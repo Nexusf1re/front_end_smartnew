@@ -49,10 +49,10 @@ async function authenticatedFetch<T>(
 ): Promise<{ success: boolean; data?: T; error?: string }> {
   try {
     let token = await getToken()
-    console.log('🔐 Token obtido:', token ? token.substring(0, 20) + '...' : 'null')
+    console.log('Token obtido:', token ? token.substring(0, 20) + '...' : 'null')
 
     const url = `${BASE_URL}${endpoint}`
-    console.log('🌐 Fazendo requisição para:', url)
+    console.log('Fazendo requisição para:', url)
 
     // Primeira tentativa com token atual
     let response = await fetch(url, {
@@ -64,13 +64,13 @@ async function authenticatedFetch<T>(
       },
     })
 
-    console.log('📡 Status da resposta:', response.status, response.statusText)
+    console.log('Status da resposta:', response.status, response.statusText)
 
     // Se receber 401, token expirou - gera novo e tenta novamente
     if (response.status === 401) {
-      console.log('⚠️ Token expirado (401), gerando novo token...')
+      console.log('Token expirado (401), gerando novo token...')
       token = await generateToken()
-      console.log('🔐 Novo token gerado:', token ? token.substring(0, 20) + '...' : 'null')
+      console.log('Novo token gerado:', token ? token.substring(0, 20) + '...' : 'null')
       
       response = await fetch(url, {
         ...options,
@@ -81,17 +81,17 @@ async function authenticatedFetch<T>(
         },
       })
       
-      console.log('📡 Status da segunda tentativa:', response.status, response.statusText)
+      console.log('Status da segunda tentativa:', response.status, response.statusText)
     }
 
     if (!response.ok) {
       const errorText = await response.text()
-      console.error('❌ Erro na resposta:', response.status, errorText)
+      console.error('Erro na resposta:', response.status, errorText)
       throw new Error(`Erro na requisição: ${response.status}`)
     }
 
     const data = await response.json()
-    console.log('✅ Dados recebidos da API:', data)
+    console.log('Dados recebidos da API:', data)
     return { success: true, data }
   } catch (error) {
     console.error('Erro na requisição autenticada:', error)
