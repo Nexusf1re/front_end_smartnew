@@ -1,7 +1,7 @@
 services:
-  app1:
+  smartnew:
     build: .
-    container_name: app1
+    container_name: smartnew
     environment:
       - NODE_ENV=production
       - PORT=3000
@@ -9,9 +9,9 @@ services:
       - "3000"
     restart: unless-stopped
 
-  app2:
+  smartnewdev:
     build: .
-    container_name: app2
+    container_name: smartnewdev
     environment:
       - NODE_ENV=production
       - PORT=3000
@@ -19,9 +19,9 @@ services:
       - "3000"
     restart: unless-stopped
 
-  app3:
+  smartnewlab:
     build: .
-    container_name: app3
+    container_name: smartnewlab
     environment:
       - NODE_ENV=production
       - PORT=3000
@@ -33,9 +33,9 @@ services:
     image: nginx:1.25-alpine
     container_name: nginx
     depends_on:
-      - app1
-      - app2
-      - app3
+      - smartnew
+      - smartnewdev
+      - smartnewlab
     ports:
       - "80:80"
     volumes:
