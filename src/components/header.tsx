@@ -15,11 +15,11 @@ export function Header() {
         <Image 
           src="/logo-ico.png" 
           alt="Logo" 
-          width={40} 
-          height={40}
+          width={55} 
+          height={55}
           className="object-contain"
         />
-        <h1 className="text-2xl font-bold text-gray-900">Performance Manutenção</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Performance Manutenção - SmartNew System</h1>
       </div>
     </header>
   )
