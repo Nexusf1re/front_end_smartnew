@@ -7,7 +7,6 @@ import Image from 'next/image'
 export function Header() {
   const handleExportExcel = () => {
     // Funcionalidade de exportação para Excel
-    //alert('Exportar para Excel')
   }
 
   return (
@@ -22,14 +21,6 @@ export function Header() {
         />
         <h1 className="text-2xl font-bold text-gray-900">Performance Manutenção</h1>
       </div>
-      <Button
-        onClick={handleExportExcel}
-        variant="outline"
-        className="gap-2 font-medium hover:bg-green-50 hover:text-green-700 hover:border-green-300 transition-colors"
-      >
-        <FileSpreadsheet className="h-4 w-4" />
-        Exportar Excel
-      </Button>
     </header>
   )
 }
