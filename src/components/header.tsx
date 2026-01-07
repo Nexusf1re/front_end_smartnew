@@ -7,7 +7,7 @@ import Image from 'next/image'
 export function Header() {
   const handleExportExcel = () => {
     // Funcionalidade de exportação para Excel
-    alert('Exportar para Excel')
+    //alert('Exportar para Excel')
   }
 
   return (
