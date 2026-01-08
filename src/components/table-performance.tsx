@@ -205,7 +205,7 @@ export function MaintenancePerformanceGrid() {
           <TableHeader className="bg-gradient-to-r from-gray-50 to-gray-100">
             <TableRow className="border-b border-gray-200">
               <TableHead className="border-r border-gray-200 py-4">
-                <SortButton column="Familia">Família</SortButton>
+                <SortButton column="Familia">Clientela</SortButton>
               </TableHead>
               <TableHead className="border-r border-gray-200 py-4">
                 <SortButton column="DF">DF (%)</SortButton>
