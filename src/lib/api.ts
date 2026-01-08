@@ -26,7 +26,7 @@ async function generateToken(): Promise<string> {
     
     return token
   } catch (error) {
-    console.error('Erro ao gerar token:', error)
+   // console.error('Erro ao gerar token:', error)
     throw error
   }
 }
@@ -49,10 +49,10 @@ async function authenticatedFetch<T>(
 ): Promise<{ success: boolean; data?: T; error?: string }> {
   try {
     let token = await getToken()
-    console.log('Token obtido:', token ? token.substring(0, 20) + '...' : 'null')
+   // console.log('Token obtido:', token ? token.substring(0, 20) + '...' : 'null')
 
     const url = `${BASE_URL}${endpoint}`
-    console.log('Fazendo requisição para:', url)
+   // console.log('Fazendo requisição para:', url)
 
     // Primeira tentativa com token atual
     let response = await fetch(url, {
@@ -64,7 +64,7 @@ async function authenticatedFetch<T>(
       },
     })
 
-    console.log('Status da resposta:', response.status, response.statusText)
+  //  console.log('Status da resposta:', response.status, response.statusText)
 
     // Se receber 401, token expirou - gera novo e tenta novamente
     if (response.status === 401) {
@@ -81,20 +81,20 @@ async function authenticatedFetch<T>(
         },
       })
       
-      console.log('Status da segunda tentativa:', response.status, response.statusText)
+   //   console.log('Status da segunda tentativa:', response.status, response.statusText)
     }
 
     if (!response.ok) {
       const errorText = await response.text()
-      console.error('Erro na resposta:', response.status, errorText)
+     // console.error('Erro na resposta:', response.status, errorText)
       throw new Error(`Erro na requisição: ${response.status}`)
     }
 
     const data = await response.json()
-    console.log('Dados recebidos da API:', data)
+ //   console.log('Dados recebidos da API:', data)
     return { success: true, data }
   } catch (error) {
-    console.error('Erro na requisição autenticada:', error)
+    // Silenciosamente retorna erro sem logar no console
     return { 
       success: false, 
       error: error instanceof Error ? error.message : 'Erro desconhecido' 

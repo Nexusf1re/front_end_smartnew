@@ -47,39 +47,28 @@ export function MaintenancePerformanceGrid() {
   const fetchData = async () => {
     setLoading(true)
     try {
-      console.log('Buscando KPIs com parâmetros:', {
-        startDate: filters.startDate,
-        endDate: filters.endDate,
-        typeMaintenance: filters.typeMaintenance || '',
-      })
-      
       const result = await getKPIs({
         startDate: filters.startDate,
         endDate: filters.endDate,
         typeMaintenance: filters.typeMaintenance || '',
       })
       
-      // console.log('Resultado da requisição:', result)
-      
       if (result.success && result.data) {
         // A API retorna {success: true, data: {success: true, data: [...]}}
         // Precisamos acessar o data interno
         const apiData = (result.data as any)?.data || result.data
-        // console.log('Dados da API:', apiData)
         
         // Garante que data seja sempre um array
         const dataArray = Array.isArray(apiData) 
           ? apiData 
           : []
-        console.log('Dados recebidos:', dataArray.length, 'registros')
         setData(dataArray as PerformanceManutencao[])
       } else {
-        console.error('Erro no resultado:', result.error)
+        // API indisponível, usar dados mockados silenciosamente
         throw new Error(result.error || 'Erro ao buscar dados')
       }
     } catch (error) {
-      console.error('Erro ao buscar dados:', error)
-      // Usar dados mock para demonstração
+      // Usar dados mock para demonstração sem logar erros
       const { mockPerformanceData } = await import('@/lib/mock-data')
       setData(mockPerformanceData)
     } finally {
